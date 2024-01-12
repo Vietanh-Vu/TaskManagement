@@ -37,9 +37,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //  disable csrf to run in local
         http.csrf(AbstractHttpConfigurer::disable);
+        // config permit all request can be accessed by anyone
         http.authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll());
+        // use authenticationProvider
         http.authenticationProvider(authenticationProvider());
         return http.build();
     }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskResponse implements Serializable {
+public class TaskDto implements Serializable {
     private LocalDateTime createAt;
     private String name;
     private Integer priority;

@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.entity.Task;
-import com.example.backend.dto.TaskResponse;
+import com.example.backend.dto.TaskDto;
 import com.example.backend.entity.User;
 import com.example.backend.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ public class TaskController {
     public ResponseEntity<?> getAll(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<Task> tasks = taskRepository.findByUser_Id(user.getId());
-        List<TaskResponse> result = tasks.stream().map((element) -> mapper.map(element, TaskResponse.class)).collect(Collectors.toList());
+        List<TaskDto> result = tasks.stream().map((element) -> mapper.map(element, TaskDto.class)).collect(Collectors.toList());
         return ResponseEntity.ok(result);
     }
 
     @PostMapping
     public ResponseEntity<?> create(
-            @RequestBody TaskResponse newTask,
+            @RequestBody TaskDto newTask,
             Authentication authentication
     ) {
         User user = (User) authentication.getPrincipal();
@@ -46,17 +46,20 @@ public class TaskController {
 
     @PutMapping
     public ResponseEntity<?> update(
-            @RequestBody TaskResponse updateTask
+            Authentication authentication,
+            @RequestBody TaskDto updateTask
     ) {
-        Task task = taskRepository.findByCreateAt(updateTask.getCreateAt());
+        User user = (User) authentication.getPrincipal();
+        Task task = taskRepository.findByCreateAtAndUser_Id(updateTask.getCreateAt(), user.getId());
         mapper.map(updateTask, task);
         taskRepository.save(task);
         return ResponseEntity.ok("Success update task.");
     }
 
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestBody TaskResponse deleteTask) {
-        Task task = taskRepository.findByCreateAt(deleteTask.getCreateAt());
+    public ResponseEntity<?> delete(Authentication authentication, @RequestBody TaskDto deleteTask) {
+        User user = (User) authentication.getPrincipal();
+        Task task = taskRepository.findByCreateAtAndUser_Id(deleteTask.getCreateAt(), user.getId());
         taskRepository.delete(task);
         return ResponseEntity.ok("Success delete task.");
     }

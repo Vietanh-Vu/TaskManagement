@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    Task findByCreateAt(LocalDateTime createAt);
+    Task findByCreateAtAndUser_Id(LocalDateTime createAt, Integer userId);
 
     List<Task> findByUser_Id(Integer userId);
 }

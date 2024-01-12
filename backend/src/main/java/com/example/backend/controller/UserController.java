@@ -28,11 +28,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authRequest.getUsername(),
-                            authRequest.getPassword()));
-            User user = (User) authentication.getPrincipal();
+            User user = userRepository.findByUsername(authRequest.getUsername()).orElseThrow(
+                    () -> new Exception()
+            );
+            if (!encoder.matches(authRequest.getPassword(), user.getPassword())) throw new Exception();
             autoComplete.build(user.getId());
             return ResponseEntity.ok().body("Login successfully");
         } catch (Exception e) {

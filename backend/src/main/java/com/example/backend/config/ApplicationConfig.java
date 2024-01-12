@@ -32,16 +32,16 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
-    private final Converter<String, String> trimConverter = new AbstractConverter<>() {
-        protected String convert(String source) {
-            return source == null ? null : source.trim();
-        }
-    };
+//    private final Converter<String, String> trimConverter = new AbstractConverter<>() {
+//        protected String convert(String source) {
+//            return source == null ? null : source.trim();
+//        }
+//    };
 
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addConverter(trimConverter);
+//        modelMapper.addConverter(trimConverter);
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.getConfiguration().setAmbiguityIgnored(true);

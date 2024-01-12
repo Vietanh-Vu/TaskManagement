@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/api/trie")
-public class TrieController {
+public class AutoCompleteController {
 
     private final AutoCompleteService autoComplete;
 
